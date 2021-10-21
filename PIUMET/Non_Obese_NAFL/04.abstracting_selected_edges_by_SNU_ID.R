@@ -3,7 +3,7 @@ library(data.table);library(plyr);library(org.Hs.eg.db)
 setwd("e:/data/NAFLD/")
 
 #
-load("edge_robust_10_lipid_non_obese_nafl.rdata")
+load("edge_robust_10_lipid_obese_nafl.rdata")
 edge = edge_res[edge_res$num >= 10, ]
 edge = unique(edge[, c("id1", "id2", "num")])
 
@@ -12,7 +12,7 @@ features = unlist(edge[, c(1, 2)])
 features = unique(features)
 
 #
-anno = read.table("anno_lipid_non_obese_nafl.txt", header = T, stringsAsFactors = F)
+anno = read.table("anno_lipid_obese_nafl.txt", header = T, stringsAsFactors = F)
 anno_meta = anno[anno$type != "Protein", ]
 idx1 = which(features %in% anno_meta$name)
 
@@ -29,18 +29,7 @@ idx_edge = which(!is.na(idx1))
 idx_anno = idx1[!is.na(idx1)]
 edge[idx_edge, "id2"] = anno_meta$snu[idx_anno]
 edge = unique(edge)
-
-#
-idx1 = which(edge$id1 == "")
-if(length(idx1) > 0){
-  edge = edge[-idx1, ]
-}
-idx1 = which(edge$id2 == "")
-if(length(idx1) > 0){
-  edge = edge[-idx1, ]
-}
-
-save(file = "lipid_non_obese_nafl_network.rdata", edge)
+save(file = "lipid_obese_nafl_network.rdata", edge)
 
 #
 edge1 = edge[, c(1, 2)]
@@ -68,4 +57,4 @@ idx_deg = idx1[!is.na(idx1)]
 HUB$logFC = ""
 HUB$logFC[idx_hub] = deg_nash$logFC[idx_deg]
 HUB = HUB$SYMBOL[HUB$logFC != ""]
-save(file = "lipid_non_obese_nafl_DEG_HUB.rdata", HUB)
+save(file = "lipid_obese_nafl_DEG_HUB.rdata", HUB)
