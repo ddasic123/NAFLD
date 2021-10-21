@@ -29,6 +29,12 @@ idx_edge = which(!is.na(idx1))
 idx_anno = idx1[!is.na(idx1)]
 edge[idx_edge, "id2"] = anno_meta$snu[idx_anno]
 edge = unique(edge)
+idx1 = which(edge$id1 == "")
+idx2 = which(edge$id2 == "")
+idx3 = union(idx1, idx2)
+if(length(idx3) > 0){
+  edge = edge[-idx3, ]
+}
 save(file = "lipid_obese_nafl_network.rdata", edge)
 
 #
