@@ -14,7 +14,10 @@ features = unique(features)
 #
 anno = read.table("anno_lipid_obese_nafl.txt", header = T, stringsAsFactors = F)
 anno_meta = anno[anno$type != "Protein", ]
-idx1 = which(features %in% anno_meta$name)
+
+#
+idx1 = which(anno_meta$snu == "")
+anno_meta$snu[idx1] = anno_meta$name[idx1]
 
 #
 idx1 = match(edge$id1, anno_meta$name)
