@@ -46,7 +46,7 @@ for(i in 1:length(edge_list)){
   idx1 = match(edge.t, edge_res$edge)
   edge_res[idx1, "num"] = edge_res[idx1, "num"] + 1
 }
-pdf("lipid_non_obese_nalf.pdf")
+pdf("./lipid_non_obese_nafl/lipid_non_obese_nalf.pdf")
 hist(edge_res$num, 20, col = "grey90",
      xlab = "# of replicated results [Gene-lipd pair] among 20 iterations")
 abline(v = 10, col = "red", lwd = 2)
