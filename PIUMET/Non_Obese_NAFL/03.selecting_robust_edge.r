@@ -64,7 +64,7 @@ for(i in 1:length(edge)){
 }
 
 #
-write.table(edge_res, "edge_res_all.txt", sep = "\t", row.names = F)
+write.table(edge_res, "./lipid_non_obese_nafl/edge_res_all.txt", sep = "\t", row.names = F)
 
 #
 edge_robust = edge_res$edge[edge_res$num >= 10]
