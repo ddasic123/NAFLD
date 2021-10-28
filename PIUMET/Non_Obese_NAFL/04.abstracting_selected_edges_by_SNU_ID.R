@@ -56,7 +56,7 @@ HUB = select(org.Hs.eg.db,
              keys = hub_gene, 
              keytype = "SYMBOL", columns = "GENENAME")
 
-#
+#Check!!!
 deg_nash = read.table("SNU_DEG_NASH.txt")
 idx1 = match(HUB$SYMBOL, rownames(deg_nash))
 idx_hub = which(!is.na(idx1))
