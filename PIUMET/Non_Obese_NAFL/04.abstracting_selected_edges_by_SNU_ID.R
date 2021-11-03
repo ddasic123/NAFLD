@@ -1,9 +1,12 @@
 rm(list = ls())
 library(data.table);library(plyr);library(org.Hs.eg.db)
-setwd("e:/data/NAFLD/")
+setwd("d:/data/NAFLD/")
 
 #
-load("edge_robust_10_lipid_obese_nafl.rdata")
+metabolite = "lipid_bile"
+disease = "non_obese_nafl"
+storage = paste0("edge_robust_10_", metabolite, "_", disease, ".rdata") 
+load(storage)
 edge = edge_res[edge_res$num >= 10, ]
 edge = unique(edge[, c("id1", "id2", "num")])
 
@@ -12,7 +15,8 @@ features = unlist(edge[, c(1, 2)])
 features = unique(features)
 
 #
-anno = read.table("anno_lipid_obese_nafl.txt", header = T, stringsAsFactors = F)
+storage = paste0("anno_", metabolite, "_", disease, ".txt")
+anno = read.table(storage, header = T, stringsAsFactors = F)
 anno_meta = anno[anno$type != "Protein", ]
 
 #
@@ -38,7 +42,8 @@ idx3 = union(idx1, idx2)
 if(length(idx3) > 0){
   edge = edge[-idx3, ]
 }
-save(file = "lipid_obese_nafl_network.rdata", edge)
+storage = paste0(metabolite, "_", disease, "_network.rdata")
+save(file = storage, edge)
 
 #
 edge1 = edge[, c(1, 2)]
@@ -66,4 +71,5 @@ idx_deg = idx1[!is.na(idx1)]
 HUB$logFC = ""
 HUB$logFC[idx_hub] = deg_nash$logFC[idx_deg]
 HUB = HUB$SYMBOL[HUB$logFC != ""]
-save(file = "lipid_obese_nafl_DEG_HUB.rdata", HUB)
+storage = paste0(metabolite, "_", disease, "_DEG_HUB.rdata")
+save(file = storage, HUB)
