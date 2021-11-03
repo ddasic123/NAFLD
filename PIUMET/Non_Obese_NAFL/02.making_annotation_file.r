@@ -1,13 +1,16 @@
 rm(list = ls())
 #
-library(plyr)
+library(plyr);library(data.table)
 options(stringsAsFactors = F)
-setwd("e:/data/NAFLD/")
+setwd("d:/data/NAFLD/")
+
+metabolite = "lipid_bile"
+disease = "non_obese_nafl"
 
 #
 anno = NULL
 for(i in 1:20){
-  dir = paste0("./lipid_non_obese_nafl/piumet_output (", i, ")/")
+  dir = paste0("./",metabolite, "_", disease, "/piumet_output (", i, ")/")
   #
   file1 = "result_node_frequency_w10.0_b2.0_mu0.0005_R3.txt"
   file1 = paste0(dir, file1)
@@ -21,7 +24,8 @@ for(i in 1:20){
 anno = unique(anno)
 
 #
-dat1 = read.table("lipid_non_obese_nafl.txt", header = T)
+storage = paste0(metabolite, "_", disease, ".txt")
+dat1 = read.table(storage, header = T)
 anno2 = NULL
 for(i in 1:nrow(dat1)){
   df.t = dat1[i, ]
