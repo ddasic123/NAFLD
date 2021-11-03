@@ -1,26 +1,35 @@
 rm(list = ls())
 library(data.table);library(plyr);library(igraph)
-setwd("e:/data/NAFLD/")
-
+setwd("d:/data/NAFLD/")
 
 #
-load("lipid_non_obese_nafl_DEG_HUB.rdata")
+metabolite = "lipid_bile"
+disease = "non_obese_nafl"
+
+#
+storage = paste0(metabolite, "_", disease, "_DEG_HUB.rdata")
+load(storage)
 candidate.gene = HUB
 
 #
-load("diff_features_lipid_non_obese_nafl.rdata")
+storage = paste0("diff_features_", metabolite, "_",disease, ".rdata")
+load(storage)
 f_up = union(gene_up, lipid_up)
 f_down = union(gene_do, lipid_do)
 
-#
-load("lipid_non_obese_nafl_network.rdata")
+#step4
+storage = paste0(metabolite, "_", disease, "_network.rdata")
+load(storage)
 res = edge
 
 #
+i = 3
 for(i in 1:length(candidate.gene)){
   gene = candidate.gene[i]
   idx1 = which(res$id1 == gene | res$id2 == gene)
   res.t = res[idx1, ]
+  idx1 = which(res.t$id2 == gene)
+  res.t[idx1, ] = res.t[idx1, c(2, 1, 3)]
   df = as.matrix(res.t[, c(1, 2)])
   df = unique(df)
   g = graph.edgelist(df, directed = T)
@@ -36,11 +45,11 @@ for(i in 1:length(candidate.gene)){
   V(g)$size = 5
   
   #lable.size
-  V(g)$label.cex = 0.3
+  V(g)$label.cex = 0.7
   idx1 = which(V(g)$name %in% f_up)
-  V(g)[idx1]$label.cex = 1
+  V(g)[idx1]$label.cex = 1.2
   idx1 = which(V(g)$name %in% f_down)
-  V(g)[idx1]$label.cex = 1
+  V(g)[idx1]$label.cex = 1.2
   idx1 = which(V(g)$name %in% gene)
   V(g)[idx1]$label.cex = 1.5
   
@@ -74,7 +83,7 @@ for(i in 1:length(candidate.gene)){
   
   #
   set.seed(2)
-  storage = paste0("./lipid_non_obese_nafl_gene/", gene,"_", i, "_lipid_non_obese_nafl.pdf")
+  storage = paste0("./", metabolite, "_", disease, "_gene/", gene,"_", i, "_", metabolite, "_", disease, "_nafl.pdf")
   pdf(storage, width = size, height = size)
   plot(g,
        vertex.frame.color = NA,
@@ -85,6 +94,7 @@ for(i in 1:length(candidate.gene)){
   dev.off()
   
 }
+
 
 #
 df = as.matrix(res[, c(1, 2)])
