@@ -33,4 +33,5 @@ anno2 = unique(anno2)
 anno = join(anno, anno2, by = "hmdb")
 anno[is.na(anno)] = ""
 
-write.table(anno, "anno_lipid_non_obese_nafl.txt", sep = "\t", row.names = F)
+storage = paste0("anno_", metabolite, "_", disease, ".txt")
+write.table(anno, storage, sep = "\t", row.names = F)
