@@ -4,6 +4,10 @@ setwd("d:/data/NAFLD/")
 library(data.table);library(matrixStats);library(limma);library(plyr)
 
 #
+metabolite = "lipid"
+disease = "obese_nash"
+
+#
 dat1 = fread("apt16066-sup-0002-tables2.txt")
 dat1 = data.frame(dat1)
 #dat1$obese_nafld_nash
@@ -53,4 +57,6 @@ dat2$fc = 0
 dat2$p = 1
 dat2 = dat2[, colnames(dat1)]
 dat1 = rbind(dat1, dat2)
-write.table(dat1, "lipid_obese_nash.txt", sep = "\t", row.names = F)
+storage = paste0(metabolite, "_", disease, ".txt")
+write.table(dat1, storage, sep = "\t", row.names = F)
+
