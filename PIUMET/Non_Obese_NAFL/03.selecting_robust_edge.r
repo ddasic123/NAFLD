@@ -1,11 +1,15 @@
 rm(list = ls());options(stringsAsFactors = F)
 library(data.table);library(plyr)
-setwd("e:/data/NAFLD/")
+setwd("d:/data/NAFLD/")
+
+#
+metabolite = "lipid_bile"
+disease = "obese_nafl"
 
 #
 edge_list = list()
 for(j in 1:20){
-  dir = paste0("./lipid_non_obese_nafl/piumet_output (", j, ")/")
+  dir = paste0("./", metabolite, "_", disease, "/piumet_output (", j, ")/")
   #
   file1 = "result_node_frequency_w10.0_b2.0_mu0.0005_R3.txt"
   file2 = "result_edge_frequency_w10.0_b2.0_mu0.0005_R3.txt"
@@ -46,7 +50,10 @@ for(i in 1:length(edge_list)){
   idx1 = match(edge.t, edge_res$edge)
   edge_res[idx1, "num"] = edge_res[idx1, "num"] + 1
 }
-pdf("./lipid_non_obese_nafl/lipid_non_obese_nalf.pdf")
+storage = paste0("./", metabolite, "_", disease, "_gene")
+dir.create(storage, showWarnings = TRUE, recursive = FALSE, mode = "0777")
+storage = paste0("./", metabolite, "_", disease, "_gene/cut_off.pdf")
+pdf(storage)
 hist(edge_res$num, 20, col = "grey90",
      xlab = "# of replicated results [Gene-lipd pair] among 20 iterations")
 abline(v = 10, col = "red", lwd = 2)
@@ -64,8 +71,10 @@ for(i in 1:length(edge)){
 }
 
 #
-write.table(edge_res, "./lipid_non_obese_nafl/edge_res_all.txt", sep = "\t", row.names = F)
+storage = paste0("./", metabolite, "_", disease, "/edge_res_all.txt")
+write.table(edge_res, storage, sep = "\t", row.names = F)
 
 #
 edge_robust = edge_res$edge[edge_res$num >= 10]
-save(file = "edge_robust_10_lipid_non_obese_nafl.rdata", edge_robust, edge_res)
+storage = paste0("edge_robust_10_", metabolite, "_", disease, ".rdata") 
+save(file = storage, edge_robust, edge_res)
