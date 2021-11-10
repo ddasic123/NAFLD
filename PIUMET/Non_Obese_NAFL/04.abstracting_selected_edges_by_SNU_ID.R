@@ -3,8 +3,12 @@ library(data.table);library(plyr);library(org.Hs.eg.db)
 setwd("d:/data/NAFLD/")
 
 #
-metabolite = "lipid_bile"
-disease = "non_obese_nafl"
+metabolite = "lipid"
+disease = "obese_nash"
+#Check!!!
+deg_nash = read.table("SNU_DEG_NASH.txt")
+
+#
 storage = paste0("edge_robust_10_", metabolite, "_", disease, ".rdata") 
 load(storage)
 edge = edge_res[edge_res$num >= 10, ]
@@ -61,8 +65,7 @@ HUB = select(org.Hs.eg.db,
              keys = hub_gene, 
              keytype = "SYMBOL", columns = "GENENAME")
 
-#Check!!!
-deg_nash = read.table("SNU_DEG_NASH.txt")
+#
 idx1 = match(HUB$SYMBOL, rownames(deg_nash))
 idx_hub = which(!is.na(idx1))
 idx_deg = idx1[!is.na(idx1)]
